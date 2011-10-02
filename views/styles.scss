@@ -1,0 +1,40 @@
+@import url(http://fonts.googleapis.com/css?family=Marvel:400,400italic,700);
+@import url(http://fonts.googleapis.com/css?family=Cabin+Sketch:700);
+
+html { min-height: 100%; }
+
+body {
+  background: black url(/images/background.png);
+  font-family: 'Marvel', sans-serif;
+  font-size: 20px;
+  padding: 0px;
+  margin: 0px;
+  min-height: 100%;
+
+  h1 {
+    font-family: 'Cabin Sketch', cursive;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  .entry {
+    img {
+      display: block;
+      border-radius: 5px;
+    }
+
+    background: rgba(0, 0, 0, 0.8);
+    padding: 5px;
+    float: left;
+    border-radius: 5px;
+    border: 1px solid rgba(100, 100, 100, 0.3);
+    box-shadow: #000 0px 0px 3px 1px;
+
+    &:hover {
+      border: 1px solid rgba(100, 100, 100, 0.4);
+      box-shadow: #000 0px 0px 5px 2px;
+    }
+  }
+
+  .clear { clear: both; }
+}
