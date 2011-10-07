@@ -3,12 +3,11 @@
   <head>
     <title>Dashboard</title>
     <link rel="stylesheet" type="text/css" href="/styles.css" />
-    <script type="text/javascript" src="/javascripts/jquery-1.6.4.min.js"></script>
-    <script type="text/javascript" src="/javascripts/raphael-min.js"></script>
-    <script type="text/javascript" src="/javascripts/g.raphael-min.js"></script>
-    <script type="text/javascript" src="/javascripts/g.line-min.js"></script>
-    <script type="text/javascript" src="/javascripts/dashboard.js"></script>
-    <script type="text/javascript" src="/javascripts/graph.js"></script>
+    <%=
+        ['jquery-1.6.4.min', 'raphael-min', 'dashboard', 'graph'].map do |path|
+          "<script type='text/javascript' src='/javascripts/#{path}.js'></script>"
+        end * "\n"
+    %>
   </head>
   <body>
     <div id="content">

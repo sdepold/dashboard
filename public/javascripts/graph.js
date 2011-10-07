@@ -1,11 +1,18 @@
 Dashboard.Graph = function(options) {
-  this.options = $.extend(options || {}, {
-    posX: 10,
-    posY: 50,
+  this.options = $.extend({
     width: 640,
-    height: 480
-  })
-  this.paper = new Raphael(this.options.posX, this.options.posY, this.options.width, this.options.height)
+    height: 480,
+    domElement: null
+  }, options || {})
+
+
+  console.log(this.options)
+
+  this.paper = new Raphael(
+    this.options.domElement,
+    this.options.width,
+    this.options.height
+  )
 }
 
 Dashboard.Graph.prototype.generatePathString = function(values) {
@@ -26,10 +33,24 @@ Dashboard.Graph.prototype.generatePathString = function(values) {
     .replace(new RegExp('%{height}', 'g'), this.options.height)
     .replace(new RegExp('%{width}', 'g'), this.options.width)
     .replace(new RegExp('%{valuePath}', 'g'), valuePath)
+
   return path
 }
 
 Dashboard.Graph.prototype.render = function(values) {
-  var path = this.generatePathString(values)
-  this.paper.path(path).attr({stroke: 'rgba(200,0,0,1)', fill: 'rgba(200,0,0,0.6)', 'stroke-width': 2})
+  var path  = this.generatePathString(values)
+    , self  = this
+
+  this
+    .paper
+    .path(path)
+    .attr({stroke: 'rgba(200,0,0,1)', fill: 'rgba(200,0,0,0.6)', 'stroke-width': 2})
+    .mousemove(function(a,b,c) {
+      self.drawLabel('heyho', 100, 50)
+    })
+}
+
+Dashboard.Graph.prototype.drawLabel = function(text, x, y) {
+  var text = this.paper.text(100, 100, "heyho").attr({font: '12px Helvetica, Arial', fill: "#999000"})
+  this.paper.set().push(text)
 }
