@@ -24,7 +24,7 @@ Dashboard.Chart.prototype.render = function(values) {
       self._drawLabel('heyho', 100, 50)
     })
 
-  this._drawAxisLabels(5)
+  this._drawAxisLabels(7)
 }
 
 // private
@@ -49,7 +49,7 @@ Dashboard.Chart.prototype._generatePathString = function() {
     .replace(new RegExp('%{height}', 'g'), this.options.height)
     .replace(new RegExp('%{width}', 'g'), this.options.width)
     .replace(new RegExp('%{valuePath}', 'g'), valuePath)
-console.log(path)
+
   return path
 }
 
@@ -78,11 +78,12 @@ Dashboard.Chart.prototype._drawAxisLabels = function(labelCount) {
     , maxY   = this.maxValue
     , values = []
 
-  for(var i = labelCount; i >= 0; i--)
-    values.push(i == 0 ? 0 : maxY / i)
+  for(var i = 0; i <= labelCount; i++) {
+    values.push((i == 0) ? 0 : (maxY * i/labelCount))
+  }
 
   values.forEach(function(value) {
-    var text = self.paper.text(100, value, value.toString())
+    var text  = self.paper.text(20, self._valueToRelative(value), parseInt(value).toString())
     self.paper.set().push(text)
   })
 }
