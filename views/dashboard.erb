@@ -14,7 +14,11 @@
       if(i < (graphData.length-1)) {
         var yValues = data.values.slice(3).map(function(value){ return parseFloat(value) })
         console.log($(".entry.graphite").get(0))
-        new Dashboard.Graph({domElement: $(".entry.graphite").get(0)}).render(yValues)
+        new Dashboard.Chart({
+          domElement: $(".entry.graphite").get(0),
+          width: 800,
+          height: 600
+        }).render(yValues)
       }
     })
   })
