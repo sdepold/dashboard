@@ -95,6 +95,21 @@ Dashboard.Chart.prototype._valueToRelative = function(value, options) {
   return result
 }
 
+Dashboard.Chart.prototype._valueToAbsolute = function(value, options) {
+  var ratX   = 1.0 * this.options.width / this.values.length
+    , ratY   = 1.0 * this.options.height / this.maxValue
+    , result = null
+
+  options = $.extend({lengthwise: false}, options || {})
+
+  if(options.lengthwise)
+    result = (ratX / value)
+  else
+    result = ((this.options.height - value) / ratY)
+
+  return result
+}
+
 Dashboard.Chart.prototype._drawAxisLabels = function(labelCount) {
   var self   = this
     , maxY   = this.maxValue
@@ -135,8 +150,18 @@ Dashboard.Chart.prototype._highlightValue = function(e) {
   var line   = this.paper.path(linePath).attr(attrs)
     , circle = this.paper.circle(segment.x, segment.y, 6)
                          .attr(jQuery.extend(attrs, { fill: 'rgba(' + this._rgb() + ',1)' }))
+    , label  = this.paper.text(segment.x + 5, this.options.height - 10, this._valueToAbsolute(segment.y))
+                         .attr({'font-weight':'bold', 'fill': 'rgba(' + this._rgb(50) + ',1)'})
+    , labelWidth = label.getBBox().width
+    , labelX = segment.x + (labelWidth / 2) + 5
+
+  if (labelX + labelWidth > this.options.width)
+    labelX = segment.x - (labelWidth / 2) - 5
+
+  label.attr('x', labelX)
 
   this.highlights.forEach(function(highlight) { highlight.remove() })
   this.highlights.push(line)
   this.highlights.push(circle)
+  this.highlights.push(label)
 }
