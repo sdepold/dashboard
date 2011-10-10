@@ -2,7 +2,12 @@ Dashboard.Chart = function(options) {
   this.options = $.extend({
     width: 640,
     height: 480,
-    domElement: null
+    domElement: null,
+    rgb: {
+      red: 200,
+      green: 0,
+      blue: 0
+    }
   }, options || {})
 
   this.paper = new Raphael(
@@ -12,6 +17,15 @@ Dashboard.Chart = function(options) {
   )
 }
 
+Dashboard.Chart.prototype.rgb = function(offset) {
+  var rgb = this.options.rgb
+    , add = function(a) { return (a+offset > 255) ? 255 : a+offset }
+
+  offset = offset || 0
+
+  return [add(rgb.red), add(rgb.green), add(rgb.blue)].join(',')
+}
+
 Dashboard.Chart.prototype.render = function(values) {
   var path  = this._generatePathString(this.values = values)
     , self  = this
@@ -19,7 +33,7 @@ Dashboard.Chart.prototype.render = function(values) {
   this
     .paper
     .path(path)
-    .attr({stroke: 'rgba(200,0,0,1)', fill: 'rgba(200,0,0,0.6)', 'stroke-width': 2})
+    .attr({stroke: 'rgba(' + this.rgb() + ',1)', fill: 'rgba(' + this.rgb() + ',0.6)', 'stroke-width': 2})
     .mousemove(function(a,b,c) {
       self._drawLabel('heyho', 100, 50)
     })
@@ -78,12 +92,12 @@ Dashboard.Chart.prototype._drawAxisLabels = function(labelCount) {
     , maxY   = this.maxValue
     , values = []
 
-  for(var i = 0; i <= labelCount; i++) {
-    values.push((i == 0) ? 0 : (maxY * i/labelCount))
+  for(var i = 1; i < labelCount; i++) {
+    values.push(maxY * i/labelCount)
   }
 
   values.forEach(function(value) {
-    var text  = self.paper.text(20, self._valueToRelative(value), parseInt(value).toString())
-    self.paper.set().push(text)
+    var text = self.paper.text(20, self._valueToRelative(value), parseInt(value).toString())
+    self.paper.set().push(text.attr({'font-weight':'bold', 'fill': 'rgba(' + self.rgb(50) + ',1)'}))
   })
 }
