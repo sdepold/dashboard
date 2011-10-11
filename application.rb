@@ -8,4 +8,11 @@ class Dashboard < Sinatra::Application
   get '/' do
     erb :dashboard
   end
+
+  get '/load' do
+    url = CGI.unescape params[:url]
+    uri = URI.parse(url)
+
+    Net::HTTP.get uri
+  end
 end
