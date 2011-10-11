@@ -4,8 +4,15 @@
     <title>Dashboard</title>
     <link rel="stylesheet" type="text/css" href="/styles.css" />
     <%=
-        ['jquery-1.6.4.min', 'raphael-min', 'dashboard', 'chart'].map do |path|
-          "<script type='text/javascript' src='/javascripts/#{path}.js'></script>"
+        ['/vendor/jquery/jquery-1.6.4.min', '/vendor/raphael-min', 'dashboard', 'chart'].map do |path|
+          url = if path.match(/^http.?:/)
+            path
+          elsif path.match(/^\//)
+            "#{path}.js"
+          else
+            "/javascripts/#{path}.js"
+          end
+          "<script type='text/javascript' src='#{url}'></script>"
         end * "\n"
     %>
   </head>
