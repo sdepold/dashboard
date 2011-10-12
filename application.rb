@@ -1,6 +1,8 @@
 require "environment"
 
 class Dashboard < Sinatra::Application
+  CONFIG = JSON.parse(File.open('config.json').read)
+
   get '/styles.css' do
     scss :styles
   end
