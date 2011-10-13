@@ -8,14 +8,24 @@
   "pages": [
     [
       {
-        "type": "graphite",
+        "type": "Chart.Graphite",
+        "host": "example.com",
+        "metrics": [ "summarize(foo, '1min')" ]
+      },
+      {
+        "type": "Chart.Graphite",
+        "host": "example.com",
+        "metrics": [ "summarize(foo, '1min')" ]
+      },
+      {
+        "type": "Chart.Graphite",
         "host": "example.com",
         "metrics": [ "summarize(foo, '1min')" ]
       }
     ],
     [
       {
-        "type": "graphite",
+        "type": "Chart.Graphite",
         "host": "example.com",
         "metrics": [ "summarize(foo, '1min')" ],
         "width": 800,
@@ -24,7 +34,7 @@
     ],
     [
       {
-        "type": "graphite",
+        "type": "Chart.Graphite",
         "host": "example.com",
         "metrics": [ "summarize(foo, '1min')" ],
         "width": 1024,
