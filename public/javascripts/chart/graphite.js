@@ -1,6 +1,11 @@
-Dashboard.Chart.Graphite = function(url) {
+Dashboard.Chart.Graphite = function(options) {
   this.chart = null
-  this.dataRequest = $.get(url)
+  this.options = options || {}
+  this.dataRequest = $.get(this.optionsToUrl())
+}
+
+Dashboard.Chart.Graphite.prototype.optionsToUrl = function() {
+  return decodeURIComponent('/load?url=http%3A%2F%2Flocalhost%3A9393%2Fgraphite.test.txt')
 }
 
 Dashboard.Chart.Graphite.prototype.render = function(domElement) {

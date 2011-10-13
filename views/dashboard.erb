@@ -1,9 +1,12 @@
+<% items = @config['pages'][@page] %>
 <script type="text/javascript">
   $(function() {
-    var url = decodeURIComponent('/load?url=http%3A%2F%2Flocalhost%3A9393%2Fgraphite.test.txt')
-    new Dashboard.Chart.Graphite(url).render($(".entry.graphite").get(0))
+    <% items.each_with_index do |metrics, i| %>
+      new Dashboard.Chart.Graphite(<%= metrics.to_json %>).render($(".entry.graphite").get(<%= i %>))
+    <% end %>
   })
 </script>
 
-<section class="entry graphite">
-</section>
+<% items.each do %>
+  <section class="entry graphite"></section>
+<% end %>
