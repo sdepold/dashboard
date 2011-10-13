@@ -2,7 +2,7 @@
 <script type="text/javascript">
   $(function() {
     <% items.each_with_index do |metrics, i| %>
-      new Dashboard.Chart.Graphite(<%= metrics.to_json %>).render($(".entry.graphite").get(<%= i %>))
+      new Dashboard.Chart.Graphite(<%= metrics.to_json %>, <%= (@config['defaults']||{}).to_json %>).render($(".entry.graphite").get(<%= i %>))
     <% end %>
   })
 </script>
