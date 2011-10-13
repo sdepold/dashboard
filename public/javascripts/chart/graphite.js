@@ -27,6 +27,8 @@ Dashboard.Chart.Graphite.prototype.getChartOptions = function(domElement) {
 }
 
 Dashboard.Chart.Graphite.prototype.render = function(domElement) {
+  domElement = domElement || jQuery("<div class='item graphite'></div>").appendTo(jQuery("#items")).get(0)
+
   var self = this
     , chartOptions = this.getChartOptions(domElement)
 
