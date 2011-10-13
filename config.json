@@ -21,6 +21,15 @@
         "width": 800,
         "height": 600
       }
+    ],
+    [
+      {
+        "type": "graphite",
+        "host": "example.com",
+        "metrics": [ "summarize(foo, '1min')" ],
+        "width": 1024,
+        "height": 600
+      }
     ]
   ]
 }

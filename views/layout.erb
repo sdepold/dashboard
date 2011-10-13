@@ -23,9 +23,16 @@
     <div id="navigation_bar">
       <h1><a href="/">Dashboard</a></h1>
       <div class="nav_items">
-        <div class="nav_item">
-          <a href="/?page=2">Next Page &raquo;</a>
-        </div>
+        <% if @page > 0 %>
+          <div class="nav_item">
+            <a href="/?page=<%= @page - 1 %>">&laquo; Previous Page</a>
+          </div>
+        <% end %>
+        <% if @config["pages"].size > @page + 1 %>
+          <div class="nav_item">
+            <a href="/?page=<%= @page + 1 %>">Next Page &raquo;</a>
+          </div>
+        <% end %>
       </div>
       <div class="clear"></div>
     </div>

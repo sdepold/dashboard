@@ -8,6 +8,8 @@ class Dashboard < Sinatra::Application
   end
 
   get '/' do
+    @page = (params[:page] || 0).to_i
+    @config = CONFIG
     erb :dashboard
   end
 
