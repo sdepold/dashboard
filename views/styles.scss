@@ -56,22 +56,25 @@ body {
     }
   }
 
-  .entry {
-    img {
-      display: block;
+  #items {
+    .item {
+      img {
+        display: block;
+        border-radius: 5px;
+      }
+
+      background: rgba(0, 0, 0, 0.8);
+      padding: 5px;
+      float: left;
       border-radius: 5px;
-    }
+      border: 1px solid rgba(100, 100, 100, 0.6);
+      box-shadow: #000 0px 0px 0px 1px;
+      margin: 5px;
 
-    background: rgba(0, 0, 0, 0.8);
-    padding: 5px;
-    float: left;
-    border-radius: 5px;
-    border: 1px solid rgba(100, 100, 100, 0.3);
-    box-shadow: #000 0px 0px 3px 1px;
-
-    &:hover {
-      border: 1px solid rgba(100, 100, 100, 0.4);
-      box-shadow: #000 0px 0px 5px 2px;
+      &:hover {
+        border: 1px solid rgba(100, 100, 100, 0.8);
+        box-shadow: #000 0px 0px 3px 2px;
+      }
     }
   }
 
