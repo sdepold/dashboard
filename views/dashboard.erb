@@ -1,12 +1,11 @@
 <% items = @config['pages'][@page] %>
 <script type="text/javascript">
   $(function() {
-    <% items.each_with_index do |metrics, i| %>
-      new Dashboard.Chart.Graphite(<%= metrics.to_json %>, <%= (@config['defaults']||{}).to_json %>).render($(".entry.graphite").get(<%= i %>))
+    <% items.each_with_index do |item, i| %>
+      var klass = Dashboard.<%= item['type'] %>
+      new klass(<%= item.to_json %>, <%= (@config['defaults'] || {}).to_json %>).render()
     <% end %>
   })
 </script>
 
-<% items.each do %>
-  <section class="entry graphite"></section>
-<% end %>
+<div id="items"></div>
