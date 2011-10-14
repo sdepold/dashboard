@@ -18,7 +18,7 @@ Dashboard.Chart.Graphite.prototype.extractData = function(data) {
         , tEnd       = parseInt(values[1])
         , tDiff      = tEnd - tStart
         , timestamps = [tStart, tStart + tDiff * 0.25, tStart + tDiff * 0.5, tStart + tDiff * 0.75, tEnd]
-console.log(timestamps)
+
       timestamps = timestamps.map(function(t) {
         return $.format.date(new Date(t * 1000), "hh:mm")
       })
@@ -46,7 +46,7 @@ Dashboard.Chart.Graphite.prototype.render = function(domElement) {
 
     graphData.forEach(function(data, i) {
       if(i < (graphData.length-1)) {
-        var yValues = data.values.map(function(value){ return parseFloat(value) })
+        var yValues = data.values.map(function(value){ return parseInt(parseFloat(value) * 100) / 100.0 })
         new Dashboard.Chart(chartOptions).render(yValues, data.timestamps)
       }
     })

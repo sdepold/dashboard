@@ -180,7 +180,7 @@ Dashboard.Chart.prototype._highlightValue = function(e) {
 
   var line   = this.paper.path(linePath).attr(attrs)
     , circle = this.paper.circle(segment.x, segment.y, 6).attr(jQuery.extend(attrs, { fill: 'rgba(' + this._rgb() + ',1)' }))
-    , label  = this.paper.text(segment.x + 5, this.options.height - 10, this._valueToAbsolute(segment.y)).attr({'font-weight':'bold', 'fill': 'rgba(' + this._rgb(50) + ',1)'})
+    , label  = this.paper.text(segment.x + 5, this.options.height - 25, this._valueToAbsolute(segment.y)).attr({'font-weight':'bold', 'fill': 'rgba(' + this._rgb(50) + ',1)'})
     , labelWidth = label.getBBox().width
     , labelX = segment.x + (labelWidth / 2) + 5
 
