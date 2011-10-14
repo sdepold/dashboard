@@ -19,4 +19,13 @@ class Dashboard < Sinatra::Application
 
     Net::HTTP.get uri
   end
+
+  get '/generate_graphite' do
+    result = ''
+    result << "summarize(foo, \"1min\"),#{(Time.now - 4*60*60).to_i},#{Time.now.to_i},60|0.0,"
+    result << (0..100).to_a.map{|i| 500 * rand + 1500 * rand }.join(',')
+    result << "\n"
+    result << "drawAsInfinite(bar),1317461450,1317468650,10|0.0,0.0"
+    result
+  end
 end
