@@ -6,7 +6,7 @@ Dashboard.Chart.Graphite = function(options, defaults) {
 }
 
 Dashboard.Chart.Graphite.prototype.optionsToUrl = function() {
-  return decodeURIComponent('/load?url=http%3A%2F%2Flocalhost%3A9393%2Fgraphite.test.txt')
+  return decodeURIComponent('/load?url=http%3A%2F%2Flocalhost%3A9393%2Fgenerate_graphite')
 }
 
 Dashboard.Chart.Graphite.prototype.extractData = function(data) {
