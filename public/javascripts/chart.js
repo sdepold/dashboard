@@ -126,7 +126,9 @@ Dashboard.Chart.prototype._drawYAxisLabels = function() {
 
   values.forEach(function(value) {
     var text = self.paper.text(20, self._valueToRelative(value), parseInt(value).toString())
-    self.paper.set().push(text.attr({'font-weight':'bold', 'fill': 'rgba(' + self._rgb(50) + ',1)'}))
+      , x    = ((text.getBBox().width / 2) + 5)
+
+    self.paper.set().push(text.attr({x: x, 'font-weight':'bold', 'fill': 'rgba(' + self._rgb(50) + ',1)'}))
   })
 }
 
@@ -134,10 +136,17 @@ Dashboard.Chart.prototype._drawXAxisLabels = function() {
   var self = this
 
   this.timestamps.forEach(function(value, i) {
-    var x    = self.options.width * (i / self.timestamps.length)
-      , text = self.paper.text(x, self.options.height - 10, value.toString())
+    var text = self.paper.text(0, self.options.height - 10, value.toString())
+      , x    = null
 
-    text.attr('x', x + text.getBBox().width / 2 + 10)
+    if(i == 0)
+      x = (text.getBBox().width / 2) + 5
+    else if(i == self.timestamps.length - 1)
+      x = self.options.width - (text.getBBox().width / 2) - 5
+    else
+      x = self.options.width * (i / (self.timestamps.length - 1))
+
+    text.attr('x', x)
     self.paper.set().push(text.attr({'font-weight':'bold', 'fill': 'rgba(' + self._rgb(50) + ',1)'}))
   })
 }

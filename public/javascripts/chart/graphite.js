@@ -20,7 +20,7 @@ Dashboard.Chart.Graphite.prototype.extractData = function(data) {
         , timestamps = [tStart, tStart + tDiff * 0.25, tStart + tDiff * 0.5, tStart + tDiff * 0.75, tEnd]
 console.log(timestamps)
       timestamps = timestamps.map(function(t) {
-        return $.format.date(new Date(t * 1000), "hh:mm:ss")
+        return $.format.date(new Date(t * 1000), "hh:mm")
       })
       return { title: title, values: values.slice(3), timestamps: timestamps }
     }
