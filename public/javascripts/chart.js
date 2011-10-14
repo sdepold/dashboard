@@ -7,7 +7,9 @@ Dashboard.Chart = function(options) {
       red: 200,
       green: 0,
       blue: 0
-    }
+    },
+    xAxisLabelCount: 4,
+    yAxisLabelCount: 7
   }, options || {})
 
   this.paper = new Raphael(
@@ -18,9 +20,10 @@ Dashboard.Chart = function(options) {
 
   this.path = null
   this.highlights = []
+  this.timestamps = null
 }
 
-Dashboard.Chart.prototype.render = function(values) {
+Dashboard.Chart.prototype.render = function(values, timestamps) {
   var path  = this._generatePathString(this.values = values)
     , self  = this
 
@@ -33,7 +36,8 @@ Dashboard.Chart.prototype.render = function(values) {
     .mousemove(function(e) { self._highlightValue(e) })
     .mouseout(function() { self.highlights.forEach(function(e){ e.remove() }) })
 
-  this._drawAxisLabels(7)
+  this.timestamps = timestamps
+  this._drawAxisLabels()
 }
 
 // private
@@ -111,19 +115,36 @@ Dashboard.Chart.prototype._valueToAbsolute = function(value, options) {
   return result
 }
 
-Dashboard.Chart.prototype._drawAxisLabels = function(labelCount) {
-  var self   = this
-    , maxY   = this.maxValue
-    , values = []
+Dashboard.Chart.prototype._drawYAxisLabels = function() {
+  var self       = this
+    , maxY       = this.maxValue
+    , values     = []
+    , labelCount = this.options.yAxisLabelCount
 
-  for(var i = 1; i < labelCount; i++) {
+  for(var i = 1; i < labelCount; i++)
     values.push(maxY * i/labelCount)
-  }
 
   values.forEach(function(value) {
     var text = self.paper.text(20, self._valueToRelative(value), parseInt(value).toString())
     self.paper.set().push(text.attr({'font-weight':'bold', 'fill': 'rgba(' + self._rgb(50) + ',1)'}))
   })
+}
+
+Dashboard.Chart.prototype._drawXAxisLabels = function() {
+  var self = this
+
+  this.timestamps.forEach(function(value, i) {
+    var x    = self.options.width * (i / self.timestamps.length)
+      , text = self.paper.text(x, self.options.height - 10, value.toString())
+
+    text.attr('x', x + text.getBBox().width / 2 + 10)
+    self.paper.set().push(text.attr({'font-weight':'bold', 'fill': 'rgba(' + self._rgb(50) + ',1)'}))
+  })
+}
+
+Dashboard.Chart.prototype._drawAxisLabels = function() {
+  this._drawYAxisLabels()
+  this._drawXAxisLabels()
 }
 
 Dashboard.Chart.prototype._highlightValue = function(e) {
@@ -149,12 +170,8 @@ Dashboard.Chart.prototype._highlightValue = function(e) {
   linePath = linePath.replace('%{y}', segment.y)
 
   var line   = this.paper.path(linePath).attr(attrs)
-    , circle = this.paper
-                   .circle(segment.x, segment.y, 6)
-                   .attr(jQuery.extend(attrs, { fill: 'rgba(' + this._rgb() + ',1)' }))
-    , label  = this.paper
-                   .text(segment.x + 5, this.options.height - 10, this._valueToAbsolute(segment.y))
-                   .attr({'font-weight':'bold', 'fill': 'rgba(' + this._rgb(50) + ',1)'})
+    , circle = this.paper.circle(segment.x, segment.y, 6).attr(jQuery.extend(attrs, { fill: 'rgba(' + this._rgb() + ',1)' }))
+    , label  = this.paper.text(segment.x + 5, this.options.height - 10, this._valueToAbsolute(segment.y)).attr({'font-weight':'bold', 'fill': 'rgba(' + this._rgb(50) + ',1)'})
     , labelWidth = label.getBBox().width
     , labelX = segment.x + (labelWidth / 2) + 5
 

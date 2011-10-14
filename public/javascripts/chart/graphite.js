@@ -10,10 +10,19 @@ Dashboard.Chart.Graphite.prototype.optionsToUrl = function() {
 }
 
 Dashboard.Chart.Graphite.prototype.extractData = function(data) {
-  var graphData = data.split('\n').map(function(l) {
-    if(l.length > 0) {
-      var title = l.match(/(.*\))/)[0]
-      return { title: title, values: l.replace(title + ',', '').split(',')}
+  var graphData = data.split('\n').map(function(line) {
+    if(line.length > 0) {
+      var title      = line.match(/(.*\))/)[0]
+        , values     = line.replace(title + ',', '').split(',')
+        , tStart     = parseInt(values[0])
+        , tEnd       = parseInt(values[1])
+        , tDiff      = tEnd - tStart
+        , timestamps = [tStart, tStart + tDiff * 0.25, tStart + tDiff * 0.5, tStart + tDiff * 0.75, tEnd]
+console.log(timestamps)
+      timestamps = timestamps.map(function(t) {
+        return $.format.date(new Date(t * 1000), "hh:mm:ss")
+      })
+      return { title: title, values: values.slice(3), timestamps: timestamps }
     }
   })
   return graphData.filter(function(hash) { return !!hash })
@@ -37,8 +46,8 @@ Dashboard.Chart.Graphite.prototype.render = function(domElement) {
 
     graphData.forEach(function(data, i) {
       if(i < (graphData.length-1)) {
-        var yValues = data.values.slice(3).map(function(value){ return parseFloat(value) })
-        new Dashboard.Chart(chartOptions).render(yValues)
+        var yValues = data.values.map(function(value){ return parseFloat(value) })
+        new Dashboard.Chart(chartOptions).render(yValues, data.timestamps)
       }
     })
   })
