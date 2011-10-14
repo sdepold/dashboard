@@ -28,6 +28,8 @@ Dashboard.Chart.prototype.render = function(values) {
     .paper
     .path(path)
     .attr({stroke: 'rgba(' + this._rgb() + ',1)', fill: 'rgba(' + this._rgb() + ',0.6)', 'stroke-width': 2})
+
+  jQuery(this.options.domElement)
     .mousemove(function(e) { self._highlightValue(e) })
     .mouseout(function() { self.highlights.forEach(function(e){ e.remove() }) })
 
