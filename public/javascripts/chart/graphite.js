@@ -5,6 +5,32 @@ Dashboard.Chart.Graphite = function(options, defaults) {
   this.dataRequest = $.get(this.optionsToUrl())
 }
 
+Dashboard.Chart.Graphite.prototype.render = function(domElement) {
+  domElement = domElement || jQuery("<div class='item graphite'></div>").appendTo(jQuery("#items")).get(0)
+
+  var self = this
+    , chartOptions = this.getChartOptions(domElement)
+
+  this.dataRequest.success(function(data) {
+    var graphData = self.extractData(data)
+      , values = []
+      , timestamps = null
+
+    graphData.forEach(function(data, i) {
+      if(i < (graphData.length-1)) {
+        var _values = data.values.map(function(value){ return parseInt(parseFloat(value) * 100) / 100.0 })
+
+        values.push(_values)
+        timestamps = timestamps || data.timestamps
+      }
+    })
+
+    new Dashboard.Chart(chartOptions).render(values, timestamps)
+  })
+}
+
+// private
+
 Dashboard.Chart.Graphite.prototype.optionsToUrl = function() {
   return decodeURIComponent('/load?url=http%3A%2F%2Flocalhost%3A9393%2Fgenerate_graphite')
 }
@@ -33,22 +59,4 @@ Dashboard.Chart.Graphite.prototype.getChartOptions = function(domElement) {
   chartOptions = jQuery.extend(chartOptions, this.options)
 
   return chartOptions
-}
-
-Dashboard.Chart.Graphite.prototype.render = function(domElement) {
-  domElement = domElement || jQuery("<div class='item graphite'></div>").appendTo(jQuery("#items")).get(0)
-
-  var self = this
-    , chartOptions = this.getChartOptions(domElement)
-
-  this.dataRequest.success(function(data) {
-    var graphData = self.extractData(data)
-
-    graphData.forEach(function(data, i) {
-      if(i < (graphData.length-1)) {
-        var yValues = data.values.map(function(value){ return parseInt(parseFloat(value) * 100) / 100.0 })
-        new Dashboard.Chart(chartOptions).render(yValues, data.timestamps)
-      }
-    })
-  })
 }
