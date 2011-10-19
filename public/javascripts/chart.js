@@ -34,8 +34,12 @@ Dashboard.Chart.prototype.render = function(options) {
   Raphael.getColor.reset()
 
   jQuery(this.options.domElement)
-    .mousemove(function(e) { self.graphs[0].highlight(e) })
-    .mouseout(function() { self.graphs[0].unhighlight() })
+    .mousemove(function(e) {
+      self.graphs.forEach(function(graph, i) { graph.highlight(e, i * 15) })
+    })
+    .mouseout(function() {
+      self.graphs.forEach(function(graph) { graph.unhighlight() })
+    })
 
   this._drawAxisLabels()
 }

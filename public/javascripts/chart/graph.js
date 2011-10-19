@@ -26,11 +26,13 @@ Dashboard.Chart.Graph.prototype.__defineGetter__('valueConversionOptions', funct
 })
 
 Dashboard.Chart.Graph.prototype.__defineGetter__('fillColor', function() {
-  return Dashboard.Chart.Helpers.rgb(this.options.rgb, 50)
+  var rgb = Dashboard.Chart.Helpers.rgb(this.options.rgb)
+  return 'rgba(' + rgb + ',0.6)'
 })
 
 Dashboard.Chart.Graph.prototype.__defineGetter__('strokeColor', function() {
-  return Dashboard.Chart.Helpers.rgb(this.options.rgb)
+  var rgb = Dashboard.Chart.Helpers.rgb(this.options.rgb)
+  return 'rgba(' + rgb + ',1)'
 })
 
 Dashboard.Chart.Graph.prototype.render = function(options) {
@@ -45,17 +47,17 @@ Dashboard.Chart.Graph.prototype.render = function(options) {
   graph = this
     .paper
     .path(path)
-    .attr({stroke: 'rgba(' + this.strokeColor + ',1)', fill: 'rgba(' + this.fillColor + ',0.6)', 'stroke-width': 2})
+    .attr({stroke: this.strokeColor, fill: this.fillColor, 'stroke-width': 2})
 
   return this
 }
 
-Dashboard.Chart.Graph.prototype.highlight = function(e) {
+Dashboard.Chart.Graph.prototype.highlight = function(e, yOffset) {
   var mouseX   = e.offsetX
     , mouseY   = e.offsetY
     , segment  = null
     , linePath = null
-    , attrs    = { stroke: 'rgba(' + this.strokeColor + ',1)', 'stroke-width': 2 }
+    , attrs    = { stroke: this.strokeColor, 'stroke-width': 2 }
 
   segment = this._generatePathString(this.values).split('L').reduce(function(prev, seg) {
     var x = parseFloat(seg.split(',')[0])
@@ -73,11 +75,11 @@ Dashboard.Chart.Graph.prototype.highlight = function(e) {
   linePath = linePath.replace('%{y}', segment.y)
 
   var line        = this.paper.path(linePath).attr(attrs)
-    , circleAttrs = jQuery.extend(attrs, { fill: 'rgba(' + this.strokeColor + ',1)' })
+    , circleAttrs = jQuery.extend(attrs, { fill: this.strokeColor })
     , circle      = this.paper.circle(segment.x, segment.y, 6).attr(circleAttrs)
     , yAbsolute   = Dashboard.Chart.Helpers.valueToAbsolute(segment.y, jQuery.extend(this.options, this.valueConversionOptions))
-    , labelAttrs  = { 'font-weight': 'bold', 'fill': 'rgba(' + this.strokeColor + ',1)' }
-    , label       = this.paper.text(segment.x + 5, this.options.height - 25, yAbsolute).attr(labelAttrs)
+    , labelAttrs  = { 'font-weight': 'bold', 'fill': this.strokeColor }
+    , label       = this.paper.text(segment.x + 5, this.options.height - 20 - yOffset, yAbsolute).attr(labelAttrs)
     , labelWidth  = label.getBBox().width
     , labelX      = segment.x + (labelWidth / 2) + 5
 

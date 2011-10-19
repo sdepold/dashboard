@@ -1,7 +1,7 @@
 {
   "defaults": {
     "graphite": {
-      "width": 320,
+      "width": 600,
       "height": 240
     }
   },
