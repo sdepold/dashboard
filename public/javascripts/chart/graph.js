@@ -25,6 +25,14 @@ Dashboard.Chart.Graph.prototype.__defineGetter__('valueConversionOptions', funct
   }
 })
 
+Dashboard.Chart.Graph.prototype.__defineGetter__('fillColor', function() {
+  return Dashboard.Chart.Helpers.rgb(this.options.rgb, 50)
+})
+
+Dashboard.Chart.Graph.prototype.__defineGetter__('strokeColor', function() {
+  return Dashboard.Chart.Helpers.rgb(this.options.rgb)
+})
+
 Dashboard.Chart.Graph.prototype.render = function(options) {
   this.options = jQuery.extend({
     rgb: { red: 200, green: 0, blue: 0 }
@@ -32,14 +40,12 @@ Dashboard.Chart.Graph.prototype.render = function(options) {
 
   var self  = this
     , path = this._generatePathString()
-    , strokeColor = Dashboard.Chart.Helpers.rgb(this.options)
-    , fillColor = Dashboard.Chart.Helpers.rgb(this.options.rgb)
     , graph = null
 
   graph = this
     .paper
     .path(path)
-    .attr({stroke: 'rgba(' + fillColor + ',1)', fill: 'rgba(' + fillColor + ',0.6)', 'stroke-width': 2})
+    .attr({stroke: 'rgba(' + this.strokeColor + ',1)', fill: 'rgba(' + this.fillColor + ',0.6)', 'stroke-width': 2})
 
   return this
 }
@@ -49,8 +55,7 @@ Dashboard.Chart.Graph.prototype.highlight = function(e) {
     , mouseY   = e.offsetY
     , segment  = null
     , linePath = null
-    , rgb      = Dashboard.Chart.Helpers.rgb(this.options.rgb)
-    , attrs    = { stroke: 'rgba(' + rgb + ',1)', 'stroke-width': 2 }
+    , attrs    = { stroke: 'rgba(' + this.strokeColor + ',1)', 'stroke-width': 2 }
 
   segment = this._generatePathString(this.values).split('L').reduce(function(prev, seg) {
     var x = parseFloat(seg.split(',')[0])
@@ -68,10 +73,10 @@ Dashboard.Chart.Graph.prototype.highlight = function(e) {
   linePath = linePath.replace('%{y}', segment.y)
 
   var line        = this.paper.path(linePath).attr(attrs)
-    , circleAttrs = jQuery.extend(attrs, { fill: 'rgba(' + rgb + ',1)' })
+    , circleAttrs = jQuery.extend(attrs, { fill: 'rgba(' + this.strokeColor + ',1)' })
     , circle      = this.paper.circle(segment.x, segment.y, 6).attr(circleAttrs)
     , yAbsolute   = Dashboard.Chart.Helpers.valueToAbsolute(segment.y, jQuery.extend(this.options, this.valueConversionOptions))
-    , labelAttrs  = { 'font-weight': 'bold', 'fill': 'rgba(' + Dashboard.Chart.Helpers.rgb(this.options.rgb, 50) + ',1)' }
+    , labelAttrs  = { 'font-weight': 'bold', 'fill': 'rgba(' + this.strokeColor + ',1)' }
     , label       = this.paper.text(segment.x + 5, this.options.height - 25, yAbsolute).attr(labelAttrs)
     , labelWidth  = label.getBBox().width
     , labelX      = segment.x + (labelWidth / 2) + 5

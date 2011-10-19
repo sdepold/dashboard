@@ -28,7 +28,6 @@ Dashboard.Chart.prototype.render = function(options) {
       , graph   = new Dashboard.Chart.Graph(self, values)
 
     self.graphs.push(graph)
-
     graph.render(options)
   })
 
@@ -38,7 +37,7 @@ Dashboard.Chart.prototype.render = function(options) {
     .mousemove(function(e) { self.graphs[0].highlight(e) })
     .mouseout(function() { self.graphs[0].unhighlight() })
 
-  //this._drawAxisLabels()
+  this._drawAxisLabels()
 }
 
 // private
@@ -66,17 +65,12 @@ Dashboard.Chart.prototype._drawYAxisLabels = function() {
     values.push(maxY * i/labelCount)
 
   values.forEach(function(value) {
-    var _value    = Dashboard.Chart.Helpers.valueToRelative(value, {
-                      width: self.paper.width,
-                      height: self.paper.height,
-                      values: self.values,
-                      max: self.maxValue
-                    })
+    console.log()
+    var _value    = Dashboard.Chart.Helpers.valueToRelative(value, self.graphs[0].valueConversionOptions)
       , text      = self.paper.text(20, _value, parseInt(value).toString())
-      , x         = ((text.getBBox().width / 2) + 5)
-      , fillColor = Dashboard.Chart.Helpers.rgb({}, 50)
+      , x         = ((text.getBBox().width / 2) + 2)
 
-    self.paper.set().push(text.attr({x: x, 'font-weight':'bold', 'fill': 'rgba(' + fillColor + ',1)'}))
+    self.paper.set().push(text.attr({x: x, 'fill': 'white'}))
   })
 }
 
@@ -84,7 +78,7 @@ Dashboard.Chart.prototype._drawXAxisLabels = function() {
   var self = this
 
   this.timestamps.forEach(function(value, i) {
-    var text = self.paper.text(0, self.options.height - 10, value.toString())
+    var text = self.paper.text(0, self.options.height - 7, value.toString())
       , x    = null
 
     if(i == 0)
@@ -94,8 +88,7 @@ Dashboard.Chart.prototype._drawXAxisLabels = function() {
     else
       x = self.options.width * (i / (self.timestamps.length - 1))
 
-    text.attr('x', x)
-    self.paper.set().push(text.attr({'font-weight':'bold', 'fill': 'rgba(' + Dashboard.Chart.Helpers.rgb(self.options.rgb, 50) + ',1)'}))
+    self.paper.set().push(text.attr({'fill': 'white', 'x': x}))
   })
 }
 
