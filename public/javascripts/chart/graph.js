@@ -76,15 +76,15 @@ Dashboard.Chart.Graph.prototype.highlight = function(e, yOffset) {
 
   var line        = this.paper.path(linePath).attr(attrs)
     , circleAttrs = jQuery.extend(attrs, { fill: this.strokeColor })
-    , circle      = this.paper.circle(segment.x, segment.y, 6).attr(circleAttrs)
+    , circle      = this.paper.circle(segment.x, segment.y, 3).attr(circleAttrs)
     , yAbsolute   = Dashboard.Chart.Helpers.valueToAbsolute(segment.y, jQuery.extend(this.options, this.valueConversionOptions))
     , labelAttrs  = { 'font-weight': 'bold', 'fill': this.strokeColor }
-    , label       = this.paper.text(segment.x + 5, this.options.height - 20 - yOffset, yAbsolute).attr(labelAttrs)
+    , label       = this.paper.text(0, segment.y, yAbsolute).attr(labelAttrs)
     , labelWidth  = label.getBBox().width
-    , labelX      = segment.x + (labelWidth / 2) + 5
+    , labelX      = segment.x + (labelWidth / 2) + 10
 
   if (labelX + labelWidth > this.options.width)
-    labelX = segment.x - (labelWidth / 2) - 5
+    labelX = segment.x - (labelWidth / 2) - 10
 
   label.attr('x', labelX)
 
