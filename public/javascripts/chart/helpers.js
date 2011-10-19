@@ -22,7 +22,7 @@ Dashboard.Chart.Helpers = {
 
   valueToAbsolute: function(value, options) {
     var ratX   = 1.0 * options.width / options.values.length
-      , ratY   = 1.0 * options.height / Dashboard.Chart.Helpers(options.values)
+      , ratY   = 1.0 * options.height / options.max
       , result = null
 
     options = $.extend({lengthwise: false}, options || {})
@@ -37,7 +37,7 @@ Dashboard.Chart.Helpers = {
 
   valueToRelative: function(value, options) {
     var ratX   = 1.0 * options.width / options.values.length
-      , ratY   = 1.0 * options.height / Dashboard.Chart.Helpers.max(options.values)
+      , ratY   = 1.0 * options.height / options.max
       , result = null
 
     options = $.extend({lengthwise: false}, options || {})

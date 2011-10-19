@@ -25,7 +25,7 @@ Dashboard.Chart.Graphite.prototype.render = function(domElement) {
       }
     })
 
-    new Dashboard.Chart(chartOptions).render(values, timestamps)
+    new Dashboard.Chart(values, timestamps).render(chartOptions)
   })
 }
 

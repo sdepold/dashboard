@@ -23,7 +23,7 @@ class Dashboard < Sinatra::Application
   get '/generate_graphite' do
     result = ''
     result << "summarize(foo, \"1min\"),#{(Time.now - 4*60*60).to_i},#{Time.now.to_i},60|0.0,"
-    result << (0..100).to_a.map{|i| 500 * rand + 1500 * rand }.join(',')
+    result << (0..100).to_a.map{|i| 10000 * rand }.join(',')
     result << "\n"
     result << "summarize(bar, \"1min\"),#{(Time.now - 4*60*60).to_i},#{Time.now.to_i},60|0.0,"
     result << (0..100).to_a.map{|i| 500 * rand + 1500 * rand }.join(',')
