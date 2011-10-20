@@ -55,11 +55,13 @@ Dashboard.Chart.Graph.prototype.render = function(options) {
 Dashboard.Chart.Graph.prototype.highlight = function(e, yOffset) {
   var segment = this._getHighlightedSegment(e.offsetX)
     , attrs   = { stroke: this.strokeColor, 'stroke-width': 2 }
+    , label   = this._renderHighlightLabel(segment, attrs)
 
   this.unhighlight()
   this.highlights.push(this._renderHighlightLine(segment, attrs))
   this.highlights.push(this._renderHighlightCircle(segment, attrs))
-  this.highlights.push(this._renderHighlightLabel(segment, attrs))
+  this.highlights.push(label)
+  this.highlights.push(this._renderHighlightLabelContainer(label))
 }
 
 Dashboard.Chart.Graph.prototype.unhighlight = function() {
@@ -94,6 +96,18 @@ Dashboard.Chart.Graph.prototype._getHighlightLinePath = function(x, y, h) {
     .replace('%{y}', y)
 }
 
+Dashboard.Chart.Graph.prototype._getHighlightedSegment = function(mouseX) {
+  return this._generatePathString(this.values).split('L').reduce(function(prev, seg) {
+    var x = parseFloat(seg.split(',')[0])
+      , y = parseFloat(seg.split(',')[1])
+
+    if((!prev.x && !prev.y) &&(x >= mouseX) && (x > prev.x))
+      return {x: x, y: y}
+    else
+      return prev
+  }, {x: 0, y: 0})
+}
+
 Dashboard.Chart.Graph.prototype._renderHighlightCircle = function(segment, attrs) {
   var circleAttrs = jQuery.extend(attrs, { fill: this.strokeColor })
     , circle      = this.paper.circle(segment.x, segment.y, 3).attr(circleAttrs)
@@ -107,10 +121,11 @@ Dashboard.Chart.Graph.prototype._renderHighlightLine = function(segment, attrs) 
 
   return line
 }
+
 Dashboard.Chart.Graph.prototype._renderHighlightLabel = function(segment, attrs) {
   var yAbsolute   = Dashboard.Chart.Helpers.valueToAbsolute(segment.y, jQuery.extend(this.options, this.valueConversionOptions))
-    , labelAttrs  = { 'font-weight': 'bold', 'fill': this.strokeColor }
-    , label       = this.paper.text(0, segment.y, yAbsolute).attr(labelAttrs)
+    , labelAttrs  = { 'font-weight': 'bold', 'fill': "white" }
+    , label       = this.paper.text(0, segment.y, Dashboard.Chart.Helpers.limitDecimals(yAbsolute)).attr(labelAttrs)
     , labelWidth  = label.getBBox().width
     , labelX      = segment.x + (labelWidth / 2) + 10
 
@@ -120,14 +135,13 @@ Dashboard.Chart.Graph.prototype._renderHighlightLabel = function(segment, attrs)
   return label.attr('x', labelX)
 }
 
-Dashboard.Chart.Graph.prototype._getHighlightedSegment = function(mouseX) {
-  return this._generatePathString(this.values).split('L').reduce(function(prev, seg) {
-    var x = parseFloat(seg.split(',')[0])
-      , y = parseFloat(seg.split(',')[1])
+Dashboard.Chart.Graph.prototype._renderHighlightLabelContainer = function(label) {
+  var bBox    = label.getBBox()
+    , padding = 2
+    , attrs   = {stroke: this.strokeColor, fill: this.fillColor, 'stroke-width': 2}
+    , rect    = this.paper.rect(bBox.x - padding, bBox.y - padding, bBox.width + 2*padding, bBox.height + 2*padding).attr(attrs)
 
-    if((!prev.x && !prev.y) &&(x >= mouseX) && (x > prev.x))
-      return {x: x, y: y}
-    else
-      return prev
-  }, {x: 0, y: 0})
+  label.toFront()
+
+  return rect
 }

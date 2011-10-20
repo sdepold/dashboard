@@ -48,5 +48,16 @@ Dashboard.Chart.Helpers = {
       result = options.height - (ratY * value)
 
     return result
+  },
+
+  limitDecimals: function(value) {
+    value = value.toString()
+
+    if(value.indexOf('.') > -1) {
+      var split = value.split(".")
+      value = [split[0], split[1].substring(0, 2)].join(".")
+    }
+
+    return value
   }
 }
