@@ -28,8 +28,8 @@
         "type": "Chart.Graphite",
         "host": "example.com",
         "metrics": [ "summarize(foo, '1min')" ],
-        "width": 800,
-        "height": 600
+        "width": 1200,
+        "height": 500
       }
     ],
     [

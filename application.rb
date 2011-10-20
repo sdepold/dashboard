@@ -22,12 +22,13 @@ class Dashboard < Sinatra::Application
 
   get '/generate_graphite' do
     result = ''
-    result << "summarize(foo, \"1min\"),#{(Time.now - 4*60*60).to_i},#{Time.now.to_i},60|0.0,"
-    result << (0..100).to_a.map{|i| 10000 * rand }.join(',')
-    result << "\n"
-    result << "summarize(bar, \"1min\"),#{(Time.now - 4*60*60).to_i},#{Time.now.to_i},60|0.0,"
-    result << (0..100).to_a.map{|i| 500 * rand + 1500 * rand }.join(',')
-    result << "\n"
+    rand_percentage = (rand * 99 + 1) / 100.0
+
+    (10*rand + 1).to_i.times do |i|
+      result << "summarize(foo#{i}, \"1min\"),#{(Time.now - 4*60*60).to_i},#{Time.now.to_i},60|0.0,"
+      result << (0..100).to_a.map{ (10000 * rand / (i * rand + 1)) * rand_percentage }.join(',')
+      result << "\n"
+    end
     result << "drawAsInfinite(barfooz),1317461450,1317468650,10|0.0,0.0"
     result
   end
